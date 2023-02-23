@@ -1,0 +1,78 @@
+NetworkID: 0.0.0.0
+IP: 10.0.2.16
+PRODUCT: sdk_gphone64_x86_64
+DEVICE: emu64xa
+BOARD: goldfish_x86_64
+BOOTLOADER: unknown
+DISPLAY: TRA4.221021.001.B1
+FINGERPRINT: google/sdk_gphone64_x86_64/emu64xa:TiramisuPrivacySandbox/TRA4.221021.001.B1/9228118:user/release-keys
+HARDWARE: ranchu
+HOST: abfarm-release-2004-0036
+ID: TRA4.221021.001.B1
+MANUFACTURER: Google
+MODEL: sdk_gphone64_x86_64
+TAGS: release-keys
+TYPE: user
+USER: android-build
+TIME: 1666912529000
+
+COUNTRY_CODE: US
+COUNTRY_NAME: United States
+COUNTRY: California
+COUNTY: Santa Clara County
+CITY: Mountain View
+STREET: Amphitheatre Parkway
+HOUSE_NUMBER: 1600
+POSTAL_CODE: 94043
+PHONE: null
+ 
+ Contacts 
+Yuval BM: 0504550047
+Rami Levy: 0799256200
+Code: 2580
+
+ Phone Calls 
+
+Phone number: 888888888, Date: 1676998745253, Type: 2
+Phone number: 0504550047, Date: 1676999422838, Type: 2
+Phone number: 0799256200, Date: 1676999532294, Type: 2
+COUNTRY_CODE: US
+COUNTRY_NAME: United States
+COUNTRY: California
+COUNTY: Santa Clara County
+CITY: Mountain View
+STREET: Amphitheatre Parkway
+HOUSE_NUMBER: 1600
+POSTAL_CODE: 94043
+PHONE: null
+ 
+ Contacts 
+Yuval BM: 0504550047
+Rami Levy: 0799256200
+Code: 2580
+
+ Phone Calls 
+
+Phone number: 888888888, Date: 1676998745253, Type: 2
+Phone number: 0504550047, Date: 1676999422838, Type: 2
+Phone number: 0799256200, Date: 1676999532294, Type: 2
+COUNTRY_CODE: US
+COUNTRY_NAME: United States
+COUNTRY: California
+COUNTY: Santa Clara County
+CITY: Mountain View
+STREET: Amphitheatre Parkway
+HOUSE_NUMBER: 1600
+POSTAL_CODE: 94043
+PHONE: null
+ 
+ Contacts 
+Yuval BM: 0504550047
+Rami Levy: 0799256200
+Code: 2580
+
+ Phone Calls 
+
+Phone number: 888888888, Date: 1676998745253, Type: 2
+Phone number: 0504550047, Date: 1676999422838, Type: 2
+Phone number: 0799256200, Date: 1676999532294, Type: 2
